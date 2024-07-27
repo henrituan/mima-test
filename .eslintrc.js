@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['expo', 'prettier'],
+  extends: ['expo', 'prettier', 'plugin:react-hooks/recommended'],
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': 'error',
@@ -53,5 +53,7 @@ module.exports = {
         },
       },
     ],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
 };
