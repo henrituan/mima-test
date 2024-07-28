@@ -4,3 +4,4 @@ node_modules
 public
 .expo
 pnpm-lock.yaml
+expo-env.d.ts
