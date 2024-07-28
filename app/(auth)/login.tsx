@@ -1,8 +1,12 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, StyleSheet } from 'react-native';
 
 import { useSession } from '@/contexts/auth.context';
+
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedTextInput } from '@/components/ThemedTextInput';
+import { ThemedView } from '@/components/ThemedView';
 
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -20,15 +24,15 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
+    <ThemedView style={styles.container}>
+      <ThemedText style={styles.title}>Login</ThemedText>
+      <ThemedTextInput
         style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
       />
-      <TextInput
+      <ThemedTextInput
         style={styles.input}
         placeholder="Password"
         value={password}
@@ -36,7 +40,7 @@ const LoginScreen: React.FC = () => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
-    </View>
+    </ThemedView>
   );
 };
 
