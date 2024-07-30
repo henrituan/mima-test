@@ -46,6 +46,11 @@ module.exports = {
             group: 'internal',
             position: 'after',
           },
+          {
+            pattern: '@/screens/**',
+            group: 'internal',
+            position: 'after',
+          },
         ],
         alphabetize: {
           order: 'asc',
