@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import {
   Modal,
@@ -7,62 +8,67 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText';
+import {
+  type AdverseEvent,
+  adverseEventsStore,
+} from '@/stores/adverse-events.store';
 
-const DATA = [
-  {
-    title: 'Main dishes',
-    data: ['Pizza', 'Burger', 'Risotto'],
-  },
-  {
-    title: 'Sides',
-    data: ['French Fries', 'Onion Rings', 'Fried Shrimps'],
-  },
-  {
-    title: 'Drinks',
-    data: ['Water', 'Coke', 'Beer'],
-  },
-  {
-    title: 'Desserts',
-    data: ['Cheese Cake', 'Ice Cream'],
-  },
-];
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+
+const getListDataFromEvents = (adverseEvents: AdverseEvent[]) => {
+  return adverseEvents.map((event) => ({
+    title: event.date,
+    data: event.events,
+  }));
+};
 
 type DiaryModalProps = {
   isVisible: boolean;
   onClose: () => void;
 };
 
-export const DiaryModal = ({ isVisible, onClose }: DiaryModalProps) => {
-  const theme = useColorScheme() ?? 'light';
-  const bgColor = theme === 'light' ? '#f0def3' : '#5c5d5e';
+export const DiaryModal = observer(
+  ({ isVisible, onClose }: DiaryModalProps) => {
+    const theme = useColorScheme() ?? 'light';
+    const bgColor = theme === 'light' ? '#f0def3' : '#5c5d5e';
 
-  return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={isVisible}
-      onRequestClose={onClose}
-    >
-      <View style={styles.modal}>
-        <View style={{ ...styles.modalContent, backgroundColor: bgColor }}>
-          <SectionList
-            sections={DATA}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => (
-              <View style={styles.item}>
-                <ThemedText>{item}</ThemedText>
-              </View>
-            )}
-            renderSectionHeader={({ section: { title } }) => (
-              <ThemedText>{title}</ThemedText>
-            )}
-          />
+    const {
+      data: { events },
+    } = adverseEventsStore;
+
+    const listData = getListDataFromEvents(events);
+
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isVisible}
+        onRequestClose={onClose}
+      >
+        <View style={styles.modal}>
+          <View style={{ ...styles.modalContent, backgroundColor: bgColor }}>
+            <SectionList
+              sections={listData}
+              keyExtractor={(item, index) => item + index}
+              renderSectionHeader={({ section: { title } }) => (
+                <ThemedText type="subtitle">{title}</ThemedText>
+              )}
+              renderItem={({ item }) => (
+                <ThemedView style={[styles.item]}>
+                  <ThemedText>{item}</ThemedText>
+                </ThemedView>
+              )}
+              SectionSeparatorComponent={Seperator}
+            />
+          </View>
         </View>
-      </View>
-    </Modal>
-  );
-};
+      </Modal>
+    );
+  },
+);
+
+const Seperator = () => <View style={{ height: 1, marginVertical: 10 }} />;
 
 const styles = StyleSheet.create({
   modal: {
@@ -83,7 +89,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
-    alignItems: 'center',
     shadowOffset: {
       width: 4,
       height: 15,
@@ -93,8 +98,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
+    marginVertical: 2,
+    backgroundColor: 'transparent',
   },
 });
