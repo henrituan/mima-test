@@ -7,7 +7,12 @@ export type AdverseEvent = {
 
 export type AdverseEventsStore = {
   data: { events: AdverseEvent[] };
+  ui: {
+    newEventsCount: number;
+  };
   addEvent: (date: string, event: string) => void;
+  increaseNewEventsCount: () => void;
+  clearNewEventsCount: () => void;
 };
 
 const twoDaysAgo = new Date();
@@ -40,6 +45,10 @@ const createAdverseEventsStore = () => {
     events: intialData,
   });
 
+  const ui = observable<AdverseEventsStore['ui']>({
+    newEventsCount: 0,
+  });
+
   const addEvent: AdverseEventsStore['addEvent'] = action((date, event) => {
     const index = data.events.findIndex((d) => d.date === date);
 
@@ -50,9 +59,20 @@ const createAdverseEventsStore = () => {
     }
   });
 
+  const increaseNewEventsCount = action(() => {
+    ui.newEventsCount++;
+  });
+
+  const clearNewEventsCount = action(() => {
+    ui.newEventsCount = 0;
+  });
+
   return {
     data,
+    ui,
     addEvent,
+    increaseNewEventsCount,
+    clearNewEventsCount,
   };
 };
 

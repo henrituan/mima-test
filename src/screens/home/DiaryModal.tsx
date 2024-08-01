@@ -8,10 +8,7 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import {
-  type AdverseEvent,
-  adverseEventsStore,
-} from '@/stores/adverse-events.store';
+import { adverseEventsStore } from '@/stores/adverse-events.store';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -24,10 +21,11 @@ type DiaryModalProps = {
 export const DiaryModal = observer(
   ({ isVisible, onClose }: DiaryModalProps) => {
     const theme = useColorScheme() ?? 'light';
-    const bgColor = theme === 'light' ? '#f0def3' : '#5c5d5e';
+    const bgColor = theme === 'light' ? '#dedef3' : '#5c5d5e';
 
     const {
       data: { events },
+      ui: { newEventsCount },
     } = adverseEventsStore;
 
     const listData = events.map((event) => ({
@@ -50,9 +48,17 @@ export const DiaryModal = observer(
               renderSectionHeader={({ section: { title } }) => (
                 <ThemedText type="subtitle">{title}</ThemedText>
               )}
-              renderItem={({ item }) => (
-                <ThemedView style={[styles.item]}>
-                  <ThemedText>{item}</ThemedText>
+              renderItem={({ item, index, section }) => (
+                <ThemedView style={styles.item}>
+                  <ThemedText
+                    style={{
+                      ...(index < newEventsCount && section.title === 'Today'
+                        ? { color: theme === 'light' ? '#a451e7' : '#f2ff3f' }
+                        : null),
+                    }}
+                  >
+                    {item}
+                  </ThemedText>
                 </ThemedView>
               )}
               SectionSeparatorComponent={Seperator}

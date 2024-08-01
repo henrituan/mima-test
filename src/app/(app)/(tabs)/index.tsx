@@ -17,7 +17,8 @@ const HomeScreen = observer(() => {
   const [isDiaryModalVisible, setDiaryModalVisible] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const { addEvent } = adverseEventsStore;
+  const { addEvent, increaseNewEventsCount, clearNewEventsCount } =
+    adverseEventsStore;
 
   const onSpeakPress = async () => {
     if (!isSpeaking) {
@@ -31,10 +32,18 @@ const HomeScreen = observer(() => {
 
     await sleep(1000);
     addEvent('Today', 'Neck Pain');
+    increaseNewEventsCount();
     await sleep(1000);
     addEvent('Today', 'Fever');
+    increaseNewEventsCount();
     await sleep(1000);
     addEvent('Today', 'Cough');
+    increaseNewEventsCount();
+  };
+
+  const onCloseDiaryModal = () => {
+    setDiaryModalVisible(false);
+    clearNewEventsCount();
   };
 
   return (
@@ -83,10 +92,7 @@ const HomeScreen = observer(() => {
           </TouchableOpacity>
         </ThemedView>
       </ParallaxScrollView>
-      <DiaryModal
-        isVisible={isDiaryModalVisible}
-        onClose={() => setDiaryModalVisible(false)}
-      />
+      <DiaryModal isVisible={isDiaryModalVisible} onClose={onCloseDiaryModal} />
     </>
   );
 });
