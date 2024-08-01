@@ -1,6 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
-import { Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  Alert,
+  Button,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 
 import { sleep } from '@/utils/promise.util';
 
@@ -30,7 +36,7 @@ const HomeScreen = observer(() => {
 
     setDiaryModalVisible(true);
 
-    await sleep(1000);
+    await sleep(500);
     addEvent('Today', 'Neck Pain');
     increaseNewEventsCount();
     await sleep(1000);
@@ -39,6 +45,8 @@ const HomeScreen = observer(() => {
     await sleep(1000);
     addEvent('Today', 'Cough');
     increaseNewEventsCount();
+
+    Alert.alert('3 events added to your diary');
   };
 
   const onCloseDiaryModal = () => {

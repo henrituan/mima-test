@@ -1,9 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import {
+  Image,
   Modal,
   SectionList,
   StyleSheet,
+  TouchableOpacity,
   View,
   useColorScheme,
 } from 'react-native';
@@ -42,6 +44,12 @@ export const DiaryModal = observer(
       >
         <View style={styles.modal}>
           <View style={{ ...styles.modalContent, backgroundColor: bgColor }}>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Image
+                source={require('@assets/images/close-icon.png')}
+                style={styles.closeIcon}
+              />
+            </TouchableOpacity>
             <SectionList
               sections={listData}
               keyExtractor={(item, index) => item + index}
@@ -78,11 +86,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
-  centeredView: {
-    flex: 1,
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: 40,
+    width: 70,
+    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    zIndex: 100,
+  },
+  closeIcon: {
+    height: 20,
+    width: 20,
   },
   modalContent: {
     padding: 35,
