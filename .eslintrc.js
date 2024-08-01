@@ -22,6 +22,11 @@ module.exports = {
             position: 'after',
           },
           {
+            pattern: '@/utils',
+            group: 'internal',
+            position: 'after',
+          },
+          {
             pattern: '@/services',
             group: 'internal',
             position: 'after',

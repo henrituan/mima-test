@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { action, observable } from 'mobx';
 
 export type AdverseEvent = {
   date: string;
@@ -36,23 +36,24 @@ const intialData: AdverseEvent[] = [
 ];
 
 const createAdverseEventsStore = () => {
-  const data: AdverseEventsStore['data'] = {
+  const data = observable<AdverseEventsStore['data']>({
     events: intialData,
-  };
+  });
 
-  const addEvent: AdverseEventsStore['addEvent'] = (date, event) => {
+  const addEvent: AdverseEventsStore['addEvent'] = action((date, event) => {
     const index = data.events.findIndex((d) => d.date === date);
+
     if (index !== -1) {
-      data.events[index].events.push(event);
+      data.events[index].events = [event, ...data.events[index].events];
     } else {
       data.events.push({ date, events: [event] });
     }
-  };
+  });
 
-  return makeAutoObservable({
+  return {
     data,
     addEvent,
-  });
+  };
 };
 
 export const adverseEventsStore: AdverseEventsStore =

@@ -16,13 +16,6 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-const getListDataFromEvents = (adverseEvents: AdverseEvent[]) => {
-  return adverseEvents.map((event) => ({
-    title: event.date,
-    data: event.events,
-  }));
-};
-
 type DiaryModalProps = {
   isVisible: boolean;
   onClose: () => void;
@@ -37,7 +30,10 @@ export const DiaryModal = observer(
       data: { events },
     } = adverseEventsStore;
 
-    const listData = getListDataFromEvents(events);
+    const listData = events.map((event) => ({
+      title: event.date,
+      data: event.events,
+    }));
 
     return (
       <Modal

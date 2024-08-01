@@ -1,5 +1,10 @@
+import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 import { Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
+
+import { sleep } from '@/utils/promise.util';
+
+import { adverseEventsStore } from '@/stores/adverse-events.store';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -8,9 +13,29 @@ import { ThemedView } from '@/components/ThemedView';
 
 import { DiaryModal } from '@/screens/home/DiaryModal';
 
-export default function HomeScreen() {
+const HomeScreen = observer(() => {
   const [isDiaryModalVisible, setDiaryModalVisible] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const { addEvent } = adverseEventsStore;
+
+  const onSpeakPress = async () => {
+    if (!isSpeaking) {
+      setIsSpeaking(true);
+      return;
+    }
+
+    setIsSpeaking(false);
+
+    setDiaryModalVisible(true);
+
+    await sleep(1000);
+    addEvent('Today', 'Neck Pain');
+    await sleep(1000);
+    addEvent('Today', 'Fever');
+    await sleep(1000);
+    addEvent('Today', 'Cough');
+  };
 
   return (
     <>
@@ -46,7 +71,7 @@ export default function HomeScreen() {
             Simply click this button and tell us everything. A report will be
             auto generated and add to you diary.
           </ThemedText>
-          <TouchableOpacity onPress={() => setIsSpeaking(!isSpeaking)}>
+          <TouchableOpacity onPress={onSpeakPress}>
             <Image
               source={
                 isSpeaking
@@ -64,7 +89,9 @@ export default function HomeScreen() {
       />
     </>
   );
-}
+});
+
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   titleContainer: {
