@@ -2,6 +2,8 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Button, StyleSheet } from 'react-native';
 
+import { sleep } from '@/utils/promise.util';
+
 import { useSession } from '@/contexts/auth.context';
 
 import { ThemedText } from '@/components/ThemedText';
@@ -11,14 +13,21 @@ import { ThemedView } from '@/components/ThemedView';
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { signIn } = useSession();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    setIsLoading(true);
+
     if (email.toLowerCase() === 'test@askmima.com' && password === 'askmima') {
       signIn();
+      await sleep(1000);
+      setIsLoading(false);
+
       router.replace('/');
     } else {
+      setIsLoading(false);
       alert('Invalid email or password');
     }
   };
@@ -39,7 +48,11 @@ const LoginScreen: React.FC = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button
+        title={isLoading ? 'Loging in ...' : 'Login'}
+        disabled={isLoading}
+        onPress={handleLogin}
+      />
     </ThemedView>
   );
 };

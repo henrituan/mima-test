@@ -32,6 +32,11 @@ module.exports = {
             position: 'after',
           },
           {
+            pattern: '@/contexts/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
             pattern: '@/stores/**',
             group: 'internal',
             position: 'after',
